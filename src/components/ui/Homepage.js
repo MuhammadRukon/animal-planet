@@ -12,7 +12,7 @@ const Homepage = () => {
   const [categories, setCategories] = useState([]);
   const [animals, setAnimals] = useState([]);
   const [refetch, setRefetch] = useState(false)
-  const [filterId, setFilterId] = useState('')
+  const [filterId, setFilterId] = useState('all')
   const [filteredAnimals, setFilteredAnimals]  = useState(animals);
 
 // modal access
@@ -32,7 +32,7 @@ const Homepage = () => {
 
 // filtering according to category
   useEffect(()=>{
-    if(filterId){
+    if(filterId!='all'){
       const filtered = animals.filter(animal => animal.categoryId === filterId);
       setFilteredAnimals(filtered)
     }else{
@@ -52,8 +52,8 @@ const Homepage = () => {
         <div className="flex flex-col md:flex-row gap-6">
           {/* right section */}
           <div className="w-full md:w-2/3 flex flex-wrap gap-4">
-            {categories?.length > 0 && categories.map(category=><Button key={category._id} handleClick={()=>setFilterId(category._id)} btnName={category.name} type={"category"}/>)}
-         {categories?.length > 0 && <Button handleClick={()=>setFilterId("")} btnName={"All Animals"} type={"category"}/>}
+            {categories?.length > 0 && categories.map(category=><Button key={category._id}  active={category._id == filterId} handleClick={()=>setFilterId(category._id)} btnName={category.name} type={"category"}/>)}
+         {categories?.length > 0 && <Button handleClick={()=>setFilterId("all")} active={filterId == 'all'} btnName={"All Animals"} type={"category"}/>}
           </div>
           {/* left section */}
           <div className="w-full md:w-1/3 flex flex-wrap justify-end gap-4">
@@ -70,7 +70,7 @@ const Homepage = () => {
 
         {/* cards section */}
         <div className="mt-10 md:mt-16 flex flex-wrap gap-x-[21px] gap-y-4">
-          {filteredAnimals.length ? filteredAnimals.map(animal=><Card  info={animal}/>) : <h2>No animals.</h2>}
+          {filteredAnimals.length ? filteredAnimals.map(animal=><Card key={animal._id} info={animal}/>) : <h2>No animals.</h2>}
         </div>
 
       </div>
